@@ -193,8 +193,8 @@
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" id="regPassword" placeholder="Create password (5-9 chars, mixed case, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{5,9}$">
-                            <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                            <input type="password" id="regPassword" placeholder="Create password (uppercase, lowercase, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{4,}$">
+                            <div class="password-hint">Must include: uppercase, lowercase, number, special character</div>
                         </div>
                         <div class="captcha-container">
                             <span id="registerCaptchaText"></span>
@@ -543,8 +543,8 @@
                             </div>
                             <div class="input-group">
                                 <label>Admin Password</label>
-                                <input type="password" id="newAdminPassword" placeholder="Strong password (5-9 chars, mixed case, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{5,9}$">
-                                <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                                <input type="password" id="newAdminPassword" placeholder="Strong password (uppercase, lowercase, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{4,}$">
+                                <div class="password-hint">Must include: uppercase, lowercase, number, special character</div>
                             </div>
                         </div>
                         <div class="form-row">
@@ -798,7 +798,7 @@
                     <div class="form-group">
                         <label>New Password</label>
                         <input type="password" id="newUserPassword" placeholder="Enter new password" required>
-                        <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                        <div class="password-hint">Must include: uppercase, lowercase, number, special character</div>
                     </div>
                     <div class="form-group">
                         <label>Confirm New Password</label>
@@ -1233,7 +1233,7 @@ function createAdmin(e) {
 
     
     if (!validateAdminPassword(password)) {
-        alert('Password must be 5-9 characters with:\n• At least one uppercase letter\n• At least one lowercase letter\n• At least one number\n• At least one special character');
+        alert('Password must contain:\n• At least one uppercase letter (A-Z)\n• At least one lowercase letter (a-z)\n• At least one number (0-9)\n• At least one special character (!@#$%^&*)');
         return;
     }
     
@@ -1465,9 +1465,9 @@ function validateUserRegistration(e) {
     }
     
     // Validate password strength
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{5,9}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{4,}$/;
     if (!passwordRegex.test(password)) {
-        alert('Password must be 5-9 characters with:\n• At least one uppercase letter\n• At least one lowercase letter\n• At least one number\n• At least one special character');
+        alert('Password must contain:\n• At least one uppercase letter (A-Z)\n• At least one lowercase letter (a-z)\n• At least one number (0-9)\n• At least one special character (!@#$%^&*)');
         return false;
     }
     
@@ -2132,7 +2132,7 @@ function selectAllFeedback() {
 
 // Create admin validation function
 function validateAdminPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{5,9}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{4,}$/;
     return passwordRegex.test(password);
 }
 
