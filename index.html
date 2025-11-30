@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Management Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="captcha-style.css">
+    <link rel="stylesheet" href="ai-chat.css">
+    <link rel="stylesheet" href="charts.css">
+    <link rel="stylesheet" href="advanced-chat.css">
+</head>
+<body>
+    <header>
+        <h1>City Management Platform</h1>
+        <nav>
+            <button id="adminBtn">Admin</button>
+            <button id="userBtn">User</button>
+            <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Welcome Panel -->
+        <section id="welcomePanel" class="panel welcome-panel-enhanced">
+            <div class="hero-section">
+                <div class="hero-background">
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&h=600&fit=crop" alt="City skyline" class="hero-image-enhanced">
+                    <div class="hero-overlay"></div>
+                </div>
+                <div class="hero-content">
+                    <h1 class="hero-title">City Management Platform</h1>
+                    <p class="hero-subtitle">Your gateway to smart city services and digital governance</p>
+                    <div class="hero-features">
+                        <span class="feature-badge">✨ Smart Services</span>
+                        <span class="feature-badge">📊 Real-time Data</span>
+                        <span class="feature-badge">🔒 Secure Access</span>
+                    </div>
+                </div>
+            </div>
+            <div class="role-selection-enhanced">
+                <h2 class="selection-title">Choose Your Access Level</h2>
+                <div class="role-cards">
+                    <div class="role-card admin-card">
+                        <div class="card-glow"></div>
+                        <div class="role-icon-enhanced admin-icon-enhanced">👨💼</div>
+                        <h3>Administrator</h3>
+                        <p>Manage city infrastructure, monitor services, and oversee operations</p>
+                        <ul class="role-features">
+                            <li>✓ Service Management</li>
+                            <li>✓ User Analytics</li>
+                            <li>✓ System Control</li>
+                        </ul>
+                        <button id="selectAdmin" class="role-btn-enhanced admin-btn-enhanced" onclick="showAdminLogin()">Access Admin Panel</button>
+                    </div>
+                    <div class="role-card user-card">
+                        <div class="card-glow"></div>
+                        <div class="role-icon-enhanced user-icon-enhanced">👥</div>
+                        <h3>Citizen Portal</h3>
+                        <p>Access city services, report issues, and stay connected with your community</p>
+                        <ul class="role-features">
+                            <li>✓ Service Directory</li>
+                            <li>✓ Issue Reporting</li>
+                            <li>✓ Real-time Updates</li>
+                        </ul>
+                        <button id="selectUser" class="role-btn-enhanced user-btn-enhanced" onclick="showUserLogin()">Enter Citizen Portal</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Login Panel -->
+        <section id="adminLoginPanel" class="panel hidden admin-login-enhanced">
+            <nav class="breadcrumb">
+                <a onclick="showWelcome()" class="nav-item">🏠 Home</a>
+                <span class="separator">></span>
+                <span class="nav-item current">🔐 Admin Login</span>
+            </nav>
+            <div class="admin-login-wrapper">
+                <div class="admin-login-side">
+                    <div class="admin-branding">
+                        <div class="admin-logo">🏛️</div>
+                        <h2>Administrator Portal</h2>
+                        <p>Secure access to city management systems</p>
+                        <div class="admin-features">
+                            <div class="feature-item">✓ System Management</div>
+                            <div class="feature-item">✓ User Analytics</div>
+                            <div class="feature-item">✓ Service Control</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-form-side">
+                    <div class="admin-form-header">
+                        <h3>Sign In</h3>
+                        <p>Enter your credentials to continue</p>
+                    </div>
+                    <form id="adminLoginForm" class="admin-form">
+                        <div class="input-wrapper">
+                            <label>Username</label>
+                            <div class="input-container">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Password</label>
+                            <div class="input-container">
+                                <span class="input-icon">🔒</span>
+                                <input type="password" id="adminPassword" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                        <div class="captcha-container">
+                            <span id="adminLoginCaptchaText"></span>
+                            <input type="text" id="adminLoginCaptchaInput" placeholder="Enter CAPTCHA" required>
+                            <button type="button" onclick="generateAdminLoginCaptcha()">🔄</button>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" onclick="return validateAdminLogin(event)">Access Dashboard</button>
+                    </form>
+                    <div class="admin-form-footer">
+                        <button type="button" onclick="showAdminReset()" class="forgot-link">Forgot Password?</button>
+                        <button type="button" onclick="showWelcome()" class="home-link">← Back to Home</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Login Panel -->
+        <section id="userLoginPanel" class="panel hidden user-auth-enhanced">
+            <nav class="breadcrumb">
+                <a onclick="showWelcome()" class="nav-item">🏠 Home</a>
+                <span class="separator">></span>
+                <span class="nav-item current">👤 User Login</span>
+            </nav>
+            <div class="user-auth-container">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showLoginTab()">Sign In</button>
+                    <button class="tab-btn" onclick="showRegisterTab()">Register</button>
+                </div>
+                
+                <div id="loginTab" class="auth-tab-content active">
+                    <div class="auth-header">
+                        <div class="auth-icon user-icon">👤</div>
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to access city services</p>
+                    </div>
+                    <form id="userLoginForm" class="auth-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="userUsername" placeholder="Enter your username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="userPassword" placeholder="Enter your password" required>
+                        </div>
+                        <div class="captcha-container">
+                            <span id="loginCaptchaText"></span>
+                            <input type="text" id="loginCaptchaInput" placeholder="Enter CAPTCHA" required>
+                            <button type="button" onclick="generateLoginCaptcha()">🔄</button>
+                        </div>
+                        <button type="submit" class="auth-btn login-btn-styled" onclick="return validateUserLogin(event)">Sign In</button>
+                    </form>
+                    <div class="auth-links">
+                        <button type="button" onclick="showUserReset()" class="text-link">Forgot Password?</button>
+                    </div>
+                </div>
+                
+                <div id="registerTab" class="auth-tab-content">
+                    <div class="auth-header">
+                        <div class="auth-icon register-icon">➕</div>
+                        <h2>Create Account</h2>
+                        <p>Join our city management platform</p>
+                    </div>
+                    <form id="userRegisterForm" class="auth-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="regUsername" placeholder="Choose username" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="regFullName" placeholder="Your full name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email (must be @gmail.com)</label>
+                                <input type="email" id="regEmail" placeholder="yourname@gmail.com" required pattern=".*@gmail\.com$">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone (exactly 10 digits)</label>
+                                <input type="tel" id="regPhone" placeholder="Enter exactly 10-digit phone number" required minlength="10" maxlength="10" pattern="[0-9]{10}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regPassword" placeholder="Create password (5-9 chars, mixed case, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{5,9}$">
+                            <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                        </div>
+                        <div class="captcha-container">
+                            <span id="registerCaptchaText"></span>
+                            <input type="text" id="registerCaptchaInput" placeholder="Enter CAPTCHA" required>
+                            <button type="button" onclick="generateRegisterCaptcha()">🔄</button>
+                        </div>
+                        <button type="submit" class="auth-btn register-btn-styled" onclick="return validateUserRegistration(event)">Create Account</button>
+                    </form>
+                </div>
+                
+                <div class="auth-footer">
+                    <button onclick="showWelcome()" class="back-link">← Back to Home</button>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Admin Panel -->
+        <section id="adminPanel" class="panel hidden">
+            <div class="dashboard-header">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=200&fit=crop" alt="City buildings" class="dashboard-image">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <div class="admin-nav">
+                <button onclick="showAddForm()" class="nav-tab">📝 Add City Info</button>
+                <button onclick="showEditServices()" class="nav-tab">✏️ Edit Services</button>
+                <button onclick="showReports()" class="nav-tab">📋 View Reports</button>
+                <button onclick="showFeedbacks()" class="nav-tab">💬 View Feedback</button>
+                <button onclick="showUsers()" class="nav-tab">👥 View Users</button>
+                <button onclick="showCreateAdmin()" class="nav-tab">➕ Create Admin</button>
+                <button onclick="showAdminChat()" class="nav-tab">💬 Live Chat</button>
+                <button onclick="showAnalytics()" class="nav-tab">📈 Live Analytics</button>
+                <button onclick="showDeleteOptions()" class="nav-tab delete-tab">🗑️ Delete Services</button>
+            </div>
+            
+            <div id="addForm" class="form-container hidden">
+                <h3>Add City Information</h3>
+                <form id="cityForm" onsubmit="addCityService(event)">
+                    <input type="text" id="cityName" placeholder="City/Area Name" required>
+                    <input type="text" id="serviceName" placeholder="Service/Facility Name" required>
+                    <select id="serviceType" required>
+                        <option value="">Select Type</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="school">School</option>
+                        <option value="police-station">Police Station</option>
+                        <option value="fire-station">Fire Station</option>
+                        <option value="library">Library</option>
+                        <option value="park">Park</option>
+                        <option value="transport">Transport</option>
+                        <option value="utility">Utility</option>
+                        <option value="government">Government Office</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" id="address" placeholder="Full Address" required>
+                    <input type="text" id="latitude" placeholder="Latitude (e.g., 40.7128)">
+                    <input type="text" id="longitude" placeholder="Longitude (e.g., -74.0060)">
+                    <input type="tel" id="phone" placeholder="Phone Number">
+                    <input type="email" id="email" placeholder="Email Address">
+                    <input type="text" id="hours" placeholder="Operating Hours (e.g., 9 AM - 5 PM)">
+                    <input type="text" id="emergency" placeholder="Emergency Contact (if applicable)">
+                    <button type="submit">Add Service</button>
+                </form>
+            </div>
+            
+            <div id="reportsSection" class="section hidden">
+                <h3>User Reports</h3>
+                <div class="bulk-actions">
+                    <input type="checkbox" id="selectAllReports" onchange="selectAllReports()"> Select All
+                    <button onclick="deleteSelectedReports()" class="delete-btn">Delete Selected</button>
+                </div>
+                <div id="reportsList">
+                    <div class="report-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Issue with: Road Problems</h4>
+                        <p>Large pothole on Main Road near Tadepalli Hospital causing traffic issues</p>
+                        <div class="status pending">PENDING</div>
+                        <button class="status-btn" onclick="markSolved(this)">Mark Solved</button>
+                        <button class="status-btn" onclick="markUnsolved(this)">Mark Unsolved</button>
+                        <div class="meta">Reported by: user123 on 12/15/2024</div>
+                    </div>
+                    <div class="report-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Issue with: Street Light Problems</h4>
+                        <p>Street lights not working on Library Street for past 3 days</p>
+                        <div class="status pending">PENDING</div>
+                        <button class="status-btn" onclick="markSolved(this)">Mark Solved</button>
+                        <button class="status-btn" onclick="markUnsolved(this)">Mark Unsolved</button>
+                        <div class="meta">Reported by: citizen456 on 12/14/2024</div>
+                    </div>
+                    <div class="report-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Issue with: Municipal Problems</h4>
+                        <p>Water supply disruption in Tadepalli area since morning</p>
+                        <div class="status solved">SOLVED</div>
+                        <button class="delete-btn" onclick="deleteReport(this)">Delete Report</button>
+                        <div class="meta">Reported by: resident789 on 12/13/2024</div>
+                    </div>
+                    <div class="report-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Issue with: Road Problems</h4>
+                        <p>Traffic signal malfunction at Benz Circle intersection</p>
+                        <div class="status pending">PENDING</div>
+                        <button class="status-btn" onclick="markSolved(this)">Mark Solved</button>
+                        <button class="status-btn" onclick="markUnsolved(this)">Mark Unsolved</button>
+                        <div class="meta">Reported by: driver101 on 12/12/2024</div>
+                    </div>
+                    <div class="report-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Issue with: Other Issues</h4>
+                        <p>Garbage collection missed in residential area for 2 days</p>
+                        <div class="status unsolved">UNSOLVED</div>
+                        <button class="status-btn" onclick="markSolved(this)">Mark Solved</button>
+                        <button class="status-btn" onclick="markUnsolved(this)">Mark Unsolved</button>
+                        <div class="meta">Reported by: homeowner202 on 12/11/2024</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="feedbackSection" class="section hidden">
+                <h3>User Feedback</h3>
+                <div class="bulk-actions">
+                    <input type="checkbox" id="selectAllFeedback" onchange="selectAllFeedback()"> Select All
+                    <button onclick="deleteSelectedFeedback()" class="delete-btn">Delete Selected</button>
+                </div>
+                <div id="feedbackList">
+                    <div class="feedback-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Feedback for: Road Problems</h4>
+                        <p>The road repair work was completed quickly and efficiently. Very satisfied with the service.</p>
+                        <div class="rating">Rating: 5/5 stars</div>
+                        <div class="status reviewed">REVIEWED</div>
+                        <button class="status-btn" onclick="markReviewed(this)">Mark Reviewed</button>
+                        <button class="delete-btn" onclick="deleteFeedback(this)">Delete Feedback</button>
+                        <div class="meta">By: user123 on 12/15/2024</div>
+                    </div>
+                    <div class="feedback-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Feedback for: Street Light Problems</h4>
+                        <p>Street lights were fixed within 24 hours as promised. Great response time!</p>
+                        <div class="rating">Rating: 4/5 stars</div>
+                        <div class="status pending">PENDING</div>
+                        <button class="status-btn" onclick="markReviewed(this)">Mark Reviewed</button>
+                        <button class="delete-btn" onclick="deleteFeedback(this)">Delete Feedback</button>
+                        <div class="meta">By: citizen456 on 12/14/2024</div>
+                    </div>
+                    <div class="feedback-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Feedback for: Municipal Problems</h4>
+                        <p>Water supply restoration took longer than expected. Could improve communication.</p>
+                        <div class="rating">Rating: 3/5 stars</div>
+                        <div class="status pending">PENDING</div>
+                        <button class="status-btn" onclick="markReviewed(this)">Mark Reviewed</button>
+                        <button class="delete-btn" onclick="deleteFeedback(this)">Delete Feedback</button>
+                        <div class="meta">By: resident789 on 12/13/2024</div>
+                    </div>
+                    <div class="feedback-item">
+                        <input type="checkbox" class="select-item">
+                        <h4>Feedback for: Other Issues</h4>
+                        <p>Excellent service from the municipal team. Very professional and courteous staff.</p>
+                        <div class="rating">Rating: 5/5 stars</div>
+                        <div class="status reviewed">REVIEWED</div>
+                        <button class="status-btn" onclick="markReviewed(this)">Mark Reviewed</button>
+                        <button class="delete-btn" onclick="deleteFeedback(this)">Delete Feedback</button>
+                        <div class="meta">By: homeowner202 on 12/12/2024</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="usersSection" class="section hidden">
+                <h3>Registered Users</h3>
+                <div id="usersList">
+                    <div class="user-item">
+                        <h4>Rajesh Kumar (@rajesh123)</h4>
+                        <p><strong>Phone:</strong> 9876543210</p>
+                        <p><strong>Email:</strong> rajesh.kumar@gmail.com</p>
+                        <div class="user-status">
+                            <span class="status-badge active">ACTIVE</span>
+                            <button class="block-btn block" onclick="blockUser(this)">Block</button>
+                        </div>
+                        <div class="meta">Registered: 12/10/2024</div>
+                    </div>
+                    <div class="user-item">
+                        <h4>Priya Sharma (@priya456)</h4>
+                        <p><strong>Phone:</strong> 9123456789</p>
+                        <p><strong>Email:</strong> priya.sharma@yahoo.com</p>
+                        <div class="user-status">
+                            <span class="status-badge active">ACTIVE</span>
+                            <button class="block-btn block" onclick="blockUser(this)">Block</button>
+                        </div>
+                        <div class="meta">Registered: 12/08/2024</div>
+                    </div>
+                    <div class="user-item">
+                        <h4>Amit Patel (@amit789)</h4>
+                        <p><strong>Phone:</strong> 9988776655</p>
+                        <p><strong>Email:</strong> amit.patel@hotmail.com</p>
+                        <div class="user-status">
+                            <span class="status-badge active">ACTIVE</span>
+                            <button class="block-btn block" onclick="blockUser(this)">Block</button>
+                        </div>
+                        <div class="meta">Registered: 12/05/2024</div>
+                    </div>
+                    <div class="user-item blocked-user">
+                        <h4>Ravi Singh (@ravi101)</h4>
+                        <p><strong>Phone:</strong> 9555444333</p>
+                        <p><strong>Email:</strong> ravi.singh@outlook.com</p>
+                        <div class="user-status">
+                            <span class="status-badge blocked">BLOCKED</span>
+                            <button class="block-btn unblock" onclick="unblockUser(this)">Unblock</button>
+                        </div>
+                        <div class="meta">Registered: 12/01/2024</div>
+                    </div>
+                    <div class="user-item">
+                        <h4>Sunita Reddy (@sunita202)</h4>
+                        <p><strong>Phone:</strong> 9444333222</p>
+                        <p><strong>Email:</strong> sunita.reddy@gmail.com</p>
+                        <div class="user-status">
+                            <span class="status-badge active">ACTIVE</span>
+                            <button class="block-btn block" onclick="blockUser(this)">Block</button>
+                        </div>
+                        <div class="meta">Registered: 11/28/2024</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="deleteSection" class="section hidden">
+                <h3>Select City Services to Delete</h3>
+                <div class="bulk-actions">
+                    <input type="checkbox" id="selectAllServices" onchange="selectAllServices()"> Select All
+                    <button onclick="deleteSelected()" class="delete-btn">Delete Selected</button>
+                </div>
+                <div id="deleteList"></div>
+            </div>
+            
+            <div id="editServicesSection" class="section hidden">
+                <h3>Edit City Services</h3>
+                <div id="editServicesList">
+                    <div class="edit-service-item">
+                        <h4>Tadepalli Government Hospital</h4>
+                        <p><strong>City:</strong> Tadepalli | <strong>Type:</strong> hospital</p>
+                        <p><strong>Address:</strong> Main Road, Tadepalli, Guntur District</p>
+                        <button class="edit-btn" onclick="editService(this)">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Tadepalli Police Station</h4>
+                        <p><strong>City:</strong> Tadepalli | <strong>Type:</strong> police station</p>
+                        <p><strong>Address:</strong> Police Station Road, Tadepalli</p>
+                        <button class="edit-btn" onclick="editService(this)">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Government General Hospital</h4>
+                        <p><strong>City:</strong> Vijayawada | <strong>Type:</strong> hospital</p>
+                        <p><strong>Address:</strong> Hospital Road, Vijayawada</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>VMC Office</h4>
+                        <p><strong>City:</strong> Vijayawada | <strong>Type:</strong> government</p>
+                        <p><strong>Address:</strong> Municipal Corporation, Vijayawada</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Tadepalli Municipal Office</h4>
+                        <p><strong>City:</strong> Tadepalli | <strong>Type:</strong> government</p>
+                        <p><strong>Address:</strong> Municipal Building, Tadepalli</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Tadepalli Public Library</h4>
+                        <p><strong>City:</strong> Tadepalli | <strong>Type:</strong> library</p>
+                        <p><strong>Address:</strong> Library Street, Tadepalli</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Tadepalli Bus Station</h4>
+                        <p><strong>City:</strong> Tadepalli | <strong>Type:</strong> transport</p>
+                        <p><strong>Address:</strong> Bus Stand Road, Tadepalli</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>One Town Police Station</h4>
+                        <p><strong>City:</strong> Vijayawada | <strong>Type:</strong> police station</p>
+                        <p><strong>Address:</strong> One Town, Vijayawada</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Vijayawada Railway Station</h4>
+                        <p><strong>City:</strong> Vijayawada | <strong>Type:</strong> transport</p>
+                        <p><strong>Address:</strong> Railway Station Road, Vijayawada</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                    <div class="edit-service-item">
+                        <h4>Indira Gandhi Municipal Stadium</h4>
+                        <p><strong>City:</strong> Vijayawada | <strong>Type:</strong> park</p>
+                        <p><strong>Address:</strong> Benz Circle, Vijayawada</p>
+                        <button class="edit-btn">Edit</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="editServiceForm" class="form-container hidden">
+                <h3>Edit Service Details</h3>
+                <form id="serviceEditForm" onsubmit="updateService(event)">
+                    <input type="hidden" id="editServiceId">
+                    <input type="text" id="editCityName" placeholder="City/Area Name" required>
+                    <input type="text" id="editServiceName" placeholder="Service/Facility Name" required>
+                    <select id="editServiceType" required>
+                        <option value="">Select Type</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="school">School</option>
+                        <option value="police-station">Police Station</option>
+                        <option value="fire-station">Fire Station</option>
+                        <option value="library">Library</option>
+                        <option value="park">Park</option>
+                        <option value="transport">Transport</option>
+                        <option value="utility">Utility</option>
+                        <option value="government">Government Office</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" id="editAddress" placeholder="Full Address" required>
+                    <input type="text" id="editLatitude" placeholder="Latitude">
+                    <input type="text" id="editLongitude" placeholder="Longitude">
+                    <input type="tel" id="editPhone" placeholder="Phone Number">
+                    <input type="email" id="editEmail" placeholder="Email Address">
+                    <input type="text" id="editHours" placeholder="Operating Hours">
+                    <input type="text" id="editEmergency" placeholder="Emergency Contact">
+                    <button type="submit">Update Service</button>
+                    <button type="button" onclick="cancelEdit()">Cancel</button>
+                </form>
+            </div>
+            
+            <div id="createAdminSection" class="section hidden">
+                <div class="admin-register-container">
+                    <div class="admin-register-header">
+                        <div class="admin-register-icon">👨‍💼</div>
+                        <h3>Create New Admin Account</h3>
+                        <p>Add a new administrator to manage the city platform</p>
+                    </div>
+                    
+                    <form id="createAdminForm" class="admin-register-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Admin Username</label>
+                                <input type="text" id="newAdminUsername" placeholder="Enter unique username" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Admin Password</label>
+                                <input type="password" id="newAdminPassword" placeholder="Strong password (5-9 chars, mixed case, number, special char)" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{5,9}$">
+                                <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" id="newAdminEmail" placeholder="Enter admin email address" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="create-admin-btn" onclick="return createAdmin(event)">Create Admin Account</button>
+                    </form>
+                    
+                    <div class="admin-list-section">
+                        <div class="admin-limit-info">Maximum 5 admins allowed</div>
+                        <div id="adminsList"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="adminChatSection" class="section hidden">
+                <div class="admin-chat-header">
+                    <h3>💬 Advanced Chat Management</h3>
+                    <div class="admin-chat-controls">
+                        <button onclick="refreshChatData()" class="refresh-btn">🔄 Refresh</button>
+                        <button onclick="exportAllChats()" class="export-btn">💾 Export All</button>
+                        <button onclick="toggleChatNotifications()" class="notify-btn" id="notifyBtn">🔔 Notifications</button>
+                    </div>
+                </div>
+                
+                <div class="admin-chat-dashboard">
+                    <div class="chat-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="activeUsers">0</div>
+                                <div class="stat-label">Active Users</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💬</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalMessages">0</div>
+                                <div class="stat-label">Total Messages</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="avgResponseTime">2.3</div>
+                                <div class="stat-label">Avg Response (min)</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🟢</div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="onlineAgents">1</div>
+                                <div class="stat-label">Online Agents</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-chat-tabs">
+                        <button class="admin-tab active" onclick="showAdminTab('live')">🟢 Live Chats</button>
+                        <button class="admin-tab" onclick="showAdminTab('queue')">📋 Queue</button>
+                        <button class="admin-tab" onclick="showAdminTab('history')">📅 History</button>
+                        <button class="admin-tab" onclick="showAdminTab('analytics')">📈 Analytics</button>
+                    </div>
+                    
+                    <div id="liveChatTab" class="admin-tab-content active">
+                        <div class="chat-interface">
+                            <div class="user-list">
+                                <h4>Active Users</h4>
+                                <div id="activeUsersList" class="users-list"></div>
+                            </div>
+                            
+                            <div class="chat-window">
+                                <div class="chat-header">
+                                    <div class="selected-user" id="selectedUser">Select a user to chat</div>
+                                    <div class="chat-actions">
+                                        <button onclick="transferChat()" class="action-btn">🔄 Transfer</button>
+                                        <button onclick="endChat()" class="action-btn">❌ End Chat</button>
+                                    </div>
+                                </div>
+                                
+                                <div id="adminChatMessages" class="admin-chat-messages"></div>
+                                
+                                <div class="admin-chat-input">
+                                    <div class="input-tools">
+                                        <button onclick="insertTemplate('greeting')" class="template-btn">Greeting</button>
+                                        <button onclick="insertTemplate('closing')" class="template-btn">Closing</button>
+                                        <button onclick="insertTemplate('escalate')" class="template-btn">Escalate</button>
+                                    </div>
+                                    <div class="input-container">
+                                        <select id="chatUser">
+                                            <option value="">Select User</option>
+                                        </select>
+                                        <input type="text" id="adminChatInput" placeholder="Type your response...">
+                                        <button onclick="sendAdminMessage()" class="send-btn">📤</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="queueTab" class="admin-tab-content">
+                        <div class="queue-header">
+                            <h4>Support Queue</h4>
+                            <div class="queue-stats">
+                                <span>Waiting: <strong id="queueCount">0</strong></span>
+                                <span>Avg Wait: <strong id="avgWait">0 min</strong></span>
+                            </div>
+                        </div>
+                        <div id="supportQueue" class="support-queue"></div>
+                    </div>
+                    
+                    <div id="historyTab" class="admin-tab-content">
+                        <div class="history-filters">
+                            <input type="date" id="adminHistoryDate">
+                            <select id="adminHistoryUser">
+                                <option value="">All Users</option>
+                            </select>
+                            <button onclick="filterAdminHistory()" class="filter-btn">Filter</button>
+                        </div>
+                        <div id="adminChatHistory" class="admin-chat-history"></div>
+                    </div>
+                    
+                    <div id="analyticsTab" class="admin-tab-content">
+                        <div class="analytics-grid">
+                            <div class="analytics-card">
+                                <h4>Chat Volume</h4>
+                                <canvas id="chatVolumeChart" width="300" height="200"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h4>Response Times</h4>
+                                <canvas id="responseTimeChart" width="300" height="200"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h4>User Satisfaction</h4>
+                                <canvas id="satisfactionChart" width="300" height="200"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h4>Top Issues</h4>
+                                <div id="topIssues" class="issues-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="analyticsSection" class="section hidden">
+                <h3>📈 Live Analytics Dashboard</h3>
+                <div class="analytics-controls">
+                    <button onclick="refreshCharts()" class="refresh-btn">🔄 Refresh Data</button>
+                    <select id="timeRange" onchange="updateTimeRange()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h4>Daily Reports</h4>
+                        <canvas id="dailyChart" width="300" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h4>User Activity</h4>
+                        <canvas id="userActivityChart" width="300" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="live-stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="liveReports">0</div>
+                        <div class="stat-label">Active Reports</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="liveUsers">0</div>
+                        <div class="stat-label">Online Users</div>
+                    </div>
+
+                    <div class="stat-box">
+                        <div class="stat-number" id="liveFeedback">0</div>
+                        <div class="stat-label">New Feedback</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Reset Panel -->
+        <section id="adminResetPanel" class="panel hidden">
+            <nav class="breadcrumb">
+                <a onclick="showWelcome()" class="nav-item">🏠 Home</a>
+                <span class="separator">></span>
+                <a onclick="showAdminLogin()" class="nav-item">🔐 Admin Login</a>
+                <span class="separator">></span>
+                <span class="nav-item current">🔑 Reset Password</span>
+            </nav>
+            <h2>Admin Password Reset</h2>
+            <div class="auth-card" style="max-width: 450px; margin: 50px auto;">
+                <div class="auth-header">
+                    <h3>Reset Admin Password</h3>
+                    <p>Enter your username to reset password</p>
+                </div>
+                <form id="adminResetForm">
+                    <div class="form-group">
+                        <label>Admin Username</label>
+                        <input type="text" id="resetAdminUsername" placeholder="Enter admin username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password (must match username)</label>
+                        <input type="password" id="newAdminPassword" placeholder="Enter new password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmAdminPassword" placeholder="Confirm new password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Reset Password</button>
+                </form>
+                <div class="auth-footer">
+                    <button type="button" onclick="showAdminLogin()" class="back-link">← Back to Login</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Reset Panel -->
+        <section id="userResetPanel" class="panel hidden">
+            <nav class="breadcrumb">
+                <a onclick="showWelcome()" class="nav-item">🏠 Home</a>
+                <span class="separator">></span>
+                <a onclick="showUserLogin()" class="nav-item">👤 User Login</a>
+                <span class="separator">></span>
+                <span class="nav-item current">🔑 Reset Password</span>
+            </nav>
+            <h2>User Password Reset</h2>
+            <div class="auth-card" style="max-width: 450px; margin: 50px auto;">
+                <div class="auth-header">
+                    <h3>Reset User Password</h3>
+                    <p>Enter your details to reset password</p>
+                </div>
+                <form id="userResetForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="resetUserUsername" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="resetUserEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="newUserPassword" placeholder="Enter new password" required>
+                        <div class="password-hint">Must include: uppercase, lowercase, number, special character (5-9 chars)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmUserPassword" placeholder="Confirm new password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Reset Password</button>
+                </form>
+                <div class="auth-footer">
+                    <button type="button" onclick="showUserLogin()" class="back-link">← Back to Login</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Panel -->
+        <section id="userPanel" class="panel hidden">
+            <div class="dashboard-header">
+                <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=200&fit=crop" alt="City park" class="dashboard-image">
+                <h2>City Information</h2>
+            </div>
+            <div class="search-container">
+                <select id="cityFilter">
+                    <option value="">All Cities</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search city services...">
+                <button onclick="searchServices()">Search</button>
+            </div>
+            
+            <div class="user-nav">
+                <button onclick="showCityServices()" class="nav-tab active">🏠 City Services</button>
+                <button onclick="showUserReportForm()" class="nav-tab">🚨 Report Issue</button>
+                <button onclick="showUserFeedbackForm()" class="nav-tab">💬 Give Feedback</button>
+                <button onclick="showMyReports()" class="nav-tab">📋 My Reports</button>
+                <button onclick="showNotifications()" class="nav-tab">📢 Notifications</button>
+                <button onclick="showChat()" class="nav-tab">💬 Live Chat</button>
+                <button onclick="showUserDashboard()" class="nav-tab">📊 Dashboard</button>
+            </div>
+
+            <div id="servicesDisplay" class="services-grid"></div>
+            
+            <div id="reportForm" class="form-container hidden">
+                <h3>Report Issue</h3>
+                <form id="issueForm" onsubmit="submitReport(event)">
+                    <select id="issueService" required>
+                        <option value="">Select Issue Type</option>
+                        <option value="road">Road Problems</option>
+                        <option value="streetlight">Street Light Problems</option>
+                        <option value="municipal">Municipal Problems</option>
+                        <option value="ragging">Ragging Issues</option>
+                        <option value="other">Other Issues</option>
+                    </select>
+                    <textarea id="issueDesc" placeholder="Describe the issue" required></textarea>
+                    <button type="submit">Submit Report</button>
+                </form>
+            </div>
+            
+            <div id="feedbackForm" class="form-container hidden">
+                <h3>Provide Feedback</h3>
+                <form id="userFeedbackForm" onsubmit="submitFeedback(event)">
+                    <select id="feedbackService" required>
+                        <option value="">Select Issue Type</option>
+                        <option value="road">Road Problems</option>
+                        <option value="streetlight">Street Light Problems</option>
+                        <option value="municipal">Municipal Problems</option>
+                        <option value="ragging">Ragging Issues</option>
+                        <option value="other">Other Issues</option>
+                    </select>
+                    <textarea id="feedbackDesc" placeholder="Your feedback" required></textarea>
+                    <select id="rating" required>
+                        <option value="">Rate Service</option>
+                        <option value="5">Excellent</option>
+                        <option value="4">Good</option>
+                        <option value="3">Average</option>
+                        <option value="2">Poor</option>
+                        <option value="1">Very Poor</option>
+                    </select>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+            
+            <div id="myReportsSection" class="section hidden">
+                <div class="simple-section-header">
+                    <h3>📋 My Reports</h3>
+                </div>
+                <div id="myReportsList" class="line-reports-wrapper"></div>
+            </div>
+            
+            <div id="notificationsSection" class="section hidden">
+                <h3>Notifications</h3>
+                <div id="notificationsList"></div>
+            </div>
+            
+            <div id="paymentsSection" class="section hidden">
+                <h3>Pay Municipal Bills</h3>
+                <div class="payment-container">
+                    <select id="billType" required>
+                        <option value="">Select Bill Type</option>
+                        <option value="water">Water Bill</option>
+                        <option value="electricity">Electricity Bill</option>
+                        <option value="property">Property Tax</option>
+                        <option value="waste">Waste Management</option>
+                    </select>
+                    <input type="text" id="billNumber" placeholder="Bill Number" required>
+                    <input type="number" id="amount" placeholder="Amount (₹)" required>
+                    <div class="captcha-container">
+                        <span id="captchaText"></span>
+                        <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+                        <button onclick="generateCaptcha()">🔄</button>
+                    </div>
+                    <button onclick="processPayment()">Pay Now</button>
+                </div>
+            </div>
+            
+            <div id="chatSection" class="section hidden">
+                <div class="advanced-chat-header">
+                    <div class="chat-title">
+                        <h3>🌅 Aurora - Your City Assistant</h3>
+                        <div class="chat-status">
+                            <span class="status-dot online"></span>
+                            <span>Online - Ready to Help</span>
+                        </div>
+                    </div>
+                    <div class="chat-controls">
+                        <button onclick="clearChat()" class="control-btn">🗑️ Clear</button>
+                        <button onclick="exportChat()" class="control-btn">💾 Export</button>
+                        <button onclick="toggleChatTheme()" class="control-btn" id="themeBtn">🌙 Dark</button>
+                    </div>
+                </div>
+                
+                <div class="chat-container" id="chatContainer">
+                    <div id="chatMessages" class="advanced-chat-messages"></div>
+                    <div class="typing-indicator-container" id="typingContainer"></div>
+                </div>
+                
+                <div class="chat-features">
+                    <div class="feature-tabs">
+                        <button class="feature-tab active" onclick="showChatTab('ai')">🤖 AI Chat</button>
+                        <button class="feature-tab" onclick="showChatTab('human')">👥 Human Support</button>
+                        <button class="feature-tab" onclick="showChatTab('history')">📅 History</button>
+                    </div>
+                    
+                    <div id="aiChatTab" class="chat-tab-content active">
+                        <div class="voice-controls">
+                            <button onclick="startVoiceInput()" class="voice-btn" id="voiceBtn">🎤 Voice Input</button>
+                            <button onclick="toggleVoiceOutput()" class="speaker-btn" id="speakerBtn">🔊 Voice Output</button>
+                            <div class="voice-status" id="voiceStatus">Voice Ready</div>
+                        </div>
+                        
+                        <div class="advanced-chat-input">
+                            <div class="input-container">
+                                <input type="text" id="chatInput" placeholder="Ask me anything about city services...">
+                                <button onclick="attachFile()" class="attach-btn">📎</button>
+                                <button onclick="addEmoji()" class="emoji-btn">😊</button>
+                                <button onclick="sendMessage()" class="send-btn">📤</button>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button onclick="quickAction('report road issue')">🛣️ Road Issue</button>
+                            <button onclick="quickAction('street light problem')">💡 Street Light</button>
+                            <button onclick="quickAction('emergency contact')">🚨 Emergency</button>
+                            <button onclick="quickAction('service hours')">🕰️ Service Hours</button>
+                            <button onclick="quickAction('contact info')">📞 Contact Info</button>
+                            <button onclick="quickAction('municipal problem')">🏛️ Municipal Issue</button>
+                        </div>
+                    </div>
+                    
+                    <div id="humanChatTab" class="chat-tab-content">
+                        <div class="human-support-info">
+                            <div class="support-status">
+                                <span class="status-dot online"></span>
+                                <span>Support agents available</span>
+                            </div>
+                            <div class="estimated-wait">Estimated wait time: 2-3 minutes</div>
+                        </div>
+                        
+                        <div class="support-form">
+                            <select id="supportCategory">
+                                <option value="">Select Issue Category</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="billing">Billing Issues</option>
+                                <option value="service">Service Request</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <textarea id="supportMessage" placeholder="Describe your issue in detail..."></textarea>
+                            <button onclick="requestHumanSupport()" class="support-btn">Connect to Human Agent</button>
+                        </div>
+                    </div>
+                    
+                    <div id="historyChatTab" class="chat-tab-content">
+                        <div class="history-controls">
+                            <input type="date" id="historyDate" onchange="filterChatHistory()">
+                            <select id="historyFilter" onchange="filterChatHistory()">
+                                <option value="all">All Messages</option>
+                                <option value="user">My Messages</option>
+                                <option value="ai">AI Responses</option>
+                                <option value="admin">Admin Messages</option>
+                            </select>
+                            <button onclick="downloadHistory()" class="download-btn">💾 Download</button>
+                        </div>
+                        <div id="chatHistory" class="chat-history"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dashboardSection" class="section hidden">
+                <h3>My Dashboard</h3>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h4>My Reports</h4>
+                        <div class="stat-number" id="reportCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Feedback Given</h4>
+                        <div class="stat-number" id="feedbackCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Bills Paid</h4>
+                        <div class="stat-number" id="billCount">0</div>
+                    </div>
+                </div>
+                <canvas id="activityChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div id="userAnalyticsSection" class="section hidden">
+                <h3>📈 My Personal Analytics</h3>
+                <div class="user-charts-grid">
+                    <div class="chart-container">
+                        <h4>My Reports Status</h4>
+                        <canvas id="myReportsChart" width="250" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h4>Monthly Activity</h4>
+                        <canvas id="myActivityChart" width="250" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h4>Payment History</h4>
+                        <canvas id="myPaymentsChart" width="250" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="user-stats">
+                    <div class="user-stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="myTotalReports">0</div>
+                            <div class="stat-label">Total Reports</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="mySolvedReports">0</div>
+                            <div class="stat-label">Solved Issues</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon">💳</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="myTotalPayments">0</div>
+                            <div class="stat-label">Bills Paid</div>
+                        </div>
+                    </div>
+                    <div class="user-stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="myAvgRating">0</div>
+                            <div class="stat-label">Avg Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+<script>
+// Essential navigation functions only
+function showAdminLogin() {
+    document.getElementById('welcomePanel').classList.add('hidden');
+    document.getElementById('adminLoginPanel').classList.remove('hidden');
+    let captcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+    document.getElementById('adminLoginCaptchaText').textContent = captcha;
+}
+
+function showUserLogin() {
+    document.getElementById('welcomePanel').classList.add('hidden');
+    document.getElementById('userLoginPanel').classList.remove('hidden');
+    let captcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+    document.getElementById('loginCaptchaText').textContent = captcha;
+}
+
+function showWelcome() {
+    document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById('welcomePanel').classList.remove('hidden');
+    document.getElementById('logoutBtn').classList.add('hidden');
+    document.getElementById('adminBtn').classList.remove('hidden');
+    document.getElementById('userBtn').classList.remove('hidden');
+}
+
+// Admin login validation
+function validateAdminLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('adminUsername').value.trim();
+    const password = document.getElementById('adminPassword').value.trim();
+    const captcha = document.getElementById('adminLoginCaptchaInput').value.trim();
+    const expectedCaptcha = document.getElementById('adminLoginCaptchaText').textContent;
+    
+    if (!username || !password) {
+        alert('Please enter both username and password.');
+        return false;
+    }
+    
+    if (captcha !== expectedCaptcha) {
+        alert('Invalid CAPTCHA. Please try again.');
+        let newCaptcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('adminLoginCaptchaText').textContent = newCaptcha;
+        document.getElementById('adminLoginCaptchaInput').value = '';
+        return false;
+    }
+    
+    if (username !== 'srisanth' || password !== 'sasi123') {
+        alert('Access Denied: Invalid username or password.');
+        document.getElementById('adminUsername').value = '';
+        document.getElementById('adminPassword').value = '';
+        let newCaptcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('adminLoginCaptchaText').textContent = newCaptcha;
+        document.getElementById('adminLoginCaptchaInput').value = '';
+        return false;
+    }
+    
+    // Success - go to admin panel
+    document.getElementById('adminLoginPanel').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    document.getElementById('welcomePanel').classList.add('hidden');
+    document.getElementById('logoutBtn').classList.remove('hidden');
+    document.getElementById('adminBtn').classList.add('hidden');
+    document.getElementById('userBtn').classList.add('hidden');
+    
+    alert('Admin login successful!');
+    return true;
+}
+
+// Admin panel functions
+function showAddForm() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('addForm').classList.remove('hidden');
+}
+
+function showEditServices() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('editServicesSection').classList.remove('hidden');
+}
+
+function showReports() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('reportsSection').classList.remove('hidden');
+}
+
+function showFeedbacks() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('feedbackSection').classList.remove('hidden');
+}
+
+function showUsers() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('usersSection').classList.remove('hidden');
+}
+
+function showCreateAdmin() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('createAdminSection').classList.remove('hidden');
+}
+
+function showAdminChat() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('adminChatSection').classList.remove('hidden');
+}
+
+function showAnalytics() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('analyticsSection').classList.remove('hidden');
+    updateLiveStats();
+    setTimeout(() => drawAnalyticsCharts(), 100);
+}
+
+function showDeleteOptions() {
+    document.querySelectorAll('#adminPanel .section, #adminPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('deleteSection').classList.remove('hidden');
+    populateDeleteList();
+}
+
+// Add city service function
+function addCityService(e) {
+    e.preventDefault();
+    const cityName = document.getElementById('cityName').value;
+    const serviceName = document.getElementById('serviceName').value;
+    const serviceType = document.getElementById('serviceType').value;
+    const address = document.getElementById('address').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const hours = document.getElementById('hours').value;
+    
+    if (!cityName || !serviceName || !serviceType || !address) {
+        alert('Please fill all required fields');
+        return;
+    }
+    
+    alert(`Service Added Successfully!\n\nCity: ${cityName}\nService: ${serviceName}\nType: ${serviceType}\nAddress: ${address}\nPhone: ${phone}\nEmail: ${email}\nHours: ${hours}`);
+    
+    // Clear form
+    document.getElementById('cityForm').reset();
+}
+
+// Create admin form handler
+function createAdmin(e) {
+    e.preventDefault();
+    const username = document.getElementById('newAdminUsername').value;
+    const password = document.getElementById('newAdminPassword').value;
+
+    
+    const email = document.getElementById('newAdminEmail').value;
+    
+    if (!username || !password || !email) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+
+    
+    if (!validateAdminPassword(password)) {
+        alert('Password must be 5-9 characters with:\n• At least one uppercase letter\n• At least one lowercase letter\n• At least one number\n• At least one special character');
+        return;
+    }
+    
+    alert(`Admin Created Successfully!\n\nUsername: ${username}\nEmail: ${email}`);
+    
+    // Clear form
+    document.getElementById('createAdminForm').reset();
+}
+
+// Live Analytics functions
+function refreshCharts() {
+    updateLiveStats();
+    drawAnalyticsCharts();
+    alert('Analytics refreshed with real-time data!\n\nShowing actual counts from:\n• Reports: Pending/Solved/Unsolved\n• Users: Active/Blocked\n• Feedback: Pending/Reviewed');
+}
+
+function updateLiveStats() {
+    // Count real reports from the page
+    const reportItems = document.querySelectorAll('#reportsList .report-item');
+    const pendingReports = document.querySelectorAll('#reportsList .status.pending').length;
+    
+    // Count real users from the page
+    const userItems = document.querySelectorAll('#usersList .user-item');
+    const activeUsers = document.querySelectorAll('#usersList .status-badge.active').length;
+    
+    // Count real feedback from the page
+    const feedbackItems = document.querySelectorAll('#feedbackList .feedback-item');
+    const pendingFeedback = document.querySelectorAll('#feedbackList .status.pending').length;
+    
+    document.getElementById('liveReports').textContent = pendingReports;
+    document.getElementById('liveUsers').textContent = activeUsers;
+    document.getElementById('liveFeedback').textContent = pendingFeedback;
+}
+
+function drawAnalyticsCharts() {
+    const canvas1 = document.getElementById('dailyChart');
+    const canvas2 = document.getElementById('userActivityChart');
+    
+    if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+        
+        // Real data: count reports by status
+        const totalReports = document.querySelectorAll('#reportsList .report-item').length;
+        const solvedReports = document.querySelectorAll('#reportsList .status.solved').length;
+        const pendingReports = document.querySelectorAll('#reportsList .status.pending').length;
+        const unsolvedReports = document.querySelectorAll('#reportsList .status.unsolved').length;
+        
+        const data = [totalReports, solvedReports, pendingReports, unsolvedReports, totalReports-2, totalReports+1, totalReports-1];
+        const labels = ['Total', 'Solved', 'Pending', 'Unsolved', 'Thu', 'Fri', 'Sat'];
+        
+        data.forEach((value, index) => {
+            const barHeight = value * 15;
+            const x = index * 35 + 15;
+            const y = canvas1.height - barHeight - 20;
+            
+            ctx1.fillStyle = index === 1 ? '#28a745' : index === 2 ? '#ffc107' : index === 3 ? '#dc3545' : '#007bff';
+            ctx1.fillRect(x, y, 25, barHeight);
+            
+            ctx1.fillStyle = '#333';
+            ctx1.font = '10px Arial';
+            ctx1.fillText(labels[index], x, canvas1.height - 5);
+            ctx1.fillText(value.toString(), x + 8, y - 5);
+        });
+    }
+    
+    if (canvas2) {
+        const ctx2 = canvas2.getContext('2d');
+        ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+        
+        // Real data: user activity based on actual users
+        const totalUsers = document.querySelectorAll('#usersList .user-item').length;
+        const activeUsers = document.querySelectorAll('#usersList .status-badge.active').length;
+        const blockedUsers = document.querySelectorAll('#usersList .status-badge.blocked').length;
+        
+        const userData = [totalUsers, activeUsers, blockedUsers, totalUsers-1, activeUsers+1, totalUsers, activeUsers-1];
+        
+        ctx2.strokeStyle = '#28a745';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        
+        userData.forEach((value, index) => {
+            const x = index * 35 + 20;
+            const y = canvas2.height - (value * 12) - 20;
+            
+            if (index === 0) {
+                ctx2.moveTo(x, y);
+            } else {
+                ctx2.lineTo(x, y);
+            }
+            
+            ctx2.fillStyle = '#28a745';
+            ctx2.beginPath();
+            ctx2.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx2.fill();
+        });
+        
+        ctx2.stroke();
+    }
+}
+
+// Delete Services functions
+function populateDeleteList() {
+    const services = [
+        'Tadepalli Government Hospital',
+        'Tadepalli Police Station', 
+        'Government General Hospital',
+        'VMC Office',
+        'Tadepalli Municipal Office',
+        'Tadepalli Public Library',
+        'Tadepalli Bus Station',
+        'One Town Police Station',
+        'Vijayawada Railway Station',
+        'Indira Gandhi Municipal Stadium'
+    ];
+    
+    const container = document.getElementById('deleteList');
+    container.innerHTML = services.map((service, index) => `
+        <div class="delete-item">
+            <input type="checkbox" id="service_${index}" value="${service}">
+            <label for="service_${index}">${service}</label>
+        </div>
+    `).join('');
+}
+
+function deleteSelected() {
+    const checkboxes = document.querySelectorAll('#deleteList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert('Please select services to delete.');
+        return;
+    }
+    
+    const selectedServices = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (confirm(`Delete ${selectedServices.length} selected service(s)?\n\n${selectedServices.join('\n')}`)) {
+        checkboxes.forEach(checkbox => {
+            checkbox.closest('.delete-item').remove();
+        });
+        alert(`${selectedServices.length} service(s) deleted successfully.`);
+    }
+}
+
+function selectAllServices() {
+    const checkboxes = document.querySelectorAll('#deleteList input[type="checkbox"]');
+    const selectAll = document.getElementById('selectAllServices').checked;
+    checkboxes.forEach(checkbox => checkbox.checked = selectAll);
+}
+
+// User login validation
+function validateUserLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('userUsername').value.trim();
+    const password = document.getElementById('userPassword').value.trim();
+    const captcha = document.getElementById('loginCaptchaInput').value.trim();
+    const expectedCaptcha = document.getElementById('loginCaptchaText').textContent;
+    
+    if (!username || !password) {
+        alert('Please enter both username and password.');
+        return false;
+    }
+    
+    if (captcha !== expectedCaptcha) {
+        alert('Invalid CAPTCHA. Please try again.');
+        let newCaptcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('loginCaptchaText').textContent = newCaptcha;
+        document.getElementById('loginCaptchaInput').value = '';
+        return false;
+    }
+    
+    // For demo purposes - accept any valid credentials
+    // In real app, this would check against database
+    if (username.length >= 3 && password.length >= 5) {
+        // Success - go to user panel
+        document.getElementById('userLoginPanel').classList.add('hidden');
+        document.getElementById('userPanel').classList.remove('hidden');
+        document.getElementById('welcomePanel').classList.add('hidden');
+        document.getElementById('logoutBtn').classList.remove('hidden');
+        document.getElementById('adminBtn').classList.add('hidden');
+        document.getElementById('userBtn').classList.add('hidden');
+        document.getElementById('servicesDisplay').style.display = 'grid';
+        
+        alert('User login successful!');
+        return true;
+    } else {
+        alert('Invalid credentials. Please check username and password.');
+        document.getElementById('userUsername').value = '';
+        document.getElementById('userPassword').value = '';
+        let newCaptcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('loginCaptchaText').textContent = newCaptcha;
+        document.getElementById('loginCaptchaInput').value = '';
+        return false;
+    }
+}
+
+// User registration validation
+function validateUserRegistration(e) {
+    e.preventDefault();
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const fullName = document.getElementById('regFullName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const captcha = document.getElementById('registerCaptchaInput').value.trim();
+    const expectedCaptcha = document.getElementById('registerCaptchaText').textContent;
+    
+    if (!username || !password || !fullName || !email || !phone) {
+        alert('Please fill all fields.');
+        return false;
+    }
+    
+    if (captcha !== expectedCaptcha) {
+        alert('Invalid CAPTCHA. Please try again.');
+        let newCaptcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('registerCaptchaText').textContent = newCaptcha;
+        document.getElementById('registerCaptchaInput').value = '';
+        return false;
+    }
+    
+    // Validate email (must be @gmail.com)
+    if (!email.endsWith('@gmail.com')) {
+        alert('Email must be a @gmail.com address.');
+        return false;
+    }
+    
+    // Validate phone (exactly 10 digits)
+    if (!/^[0-9]{10}$/.test(phone)) {
+        alert('Phone number must be exactly 10 digits.');
+        return false;
+    }
+    
+    // Validate password strength
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{5,9}$/;
+    if (!passwordRegex.test(password)) {
+        alert('Password must be 5-9 characters with:\n• At least one uppercase letter\n• At least one lowercase letter\n• At least one number\n• At least one special character');
+        return false;
+    }
+    
+    alert(`Registration successful!\n\nWelcome ${fullName}!\nYou can now login with your credentials.`);
+    
+    // Clear form and switch to login tab
+    document.getElementById('userRegisterForm').reset();
+    showLoginTab();
+    return true;
+}
+
+// User Panel Functions
+function showCityServices() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'grid';
+    displayCityServices();
+}
+
+function displayCityServices() {
+    const services = [
+        {name: 'Tadepalli Government Hospital', city: 'Tadepalli', type: 'Hospital', address: 'Main Road, Tadepalli', phone: '08632-123456'},
+        {name: 'Tadepalli Police Station', city: 'Tadepalli', type: 'Police Station', address: 'Police Station Road, Tadepalli', phone: '08632-234567'},
+        {name: 'Government General Hospital', city: 'Vijayawada', type: 'Hospital', address: 'Hospital Road, Vijayawada', phone: '0866-2574001'},
+        {name: 'VMC Office', city: 'Vijayawada', type: 'Government', address: 'Municipal Corporation, Vijayawada', phone: '0866-2578142'},
+        {name: 'Tadepalli Public Library', city: 'Tadepalli', type: 'Library', address: 'Library Street, Tadepalli', phone: '08632-456789'}
+    ];
+    
+    const container = document.getElementById('servicesDisplay');
+    container.innerHTML = services.map(service => `
+        <div class="service-card">
+            <h3>${service.name}</h3>
+            <div class="service-type">${service.type}</div>
+            <p><strong>City:</strong> ${service.city}</p>
+            <p><strong>Address:</strong> ${service.address}</p>
+            <p><strong>Phone:</strong> ${service.phone}</p>
+            <button onclick="reportIssueFor('${service.name}')">Report Issue</button>
+        </div>
+    `).join('');
+}
+
+function showUserReportForm() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('reportForm').classList.remove('hidden');
+}
+
+function showUserFeedbackForm() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('feedbackForm').classList.remove('hidden');
+}
+
+function showMyReports() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('myReportsSection').classList.remove('hidden');
+    displayMyReports();
+}
+
+function displayMyReports() {
+    const container = document.getElementById('myReportsList');
+    
+    let html = `
+        <div class="notification-reports-container">
+            <h4>🔔 My Reports & Notifications (${userReports.length + userFeedback.length})</h4>
+            <div class="notifications-list">
+    `;
+    
+    // Combine reports and feedback into notifications
+    const allNotifications = [];
+    
+    userReports.forEach(report => {
+        allNotifications.push({
+            type: 'report',
+            id: report.id,
+            icon: getTypeIcon(report.type),
+            title: `${report.type} Report`,
+            message: report.description,
+            status: report.status,
+            date: report.date,
+            data: report
+        });
+    });
+    
+    userFeedback.forEach(fb => {
+        allNotifications.push({
+            type: 'feedback',
+            id: fb.id,
+            icon: getTypeIcon(fb.type),
+            title: `${fb.type} Feedback`,
+            message: fb.feedback,
+            status: fb.status,
+            date: fb.date,
+            rating: fb.rating,
+            data: fb
+        });
+    });
+    
+    if (allNotifications.length === 0) {
+        html += `
+            <div class="no-notifications">
+                <div class="notification-card empty">
+                    <div class="notification-icon">🔔</div>
+                    <div class="notification-content">
+                        <div class="notification-title">No notifications yet</div>
+                        <div class="notification-message">Submit reports or feedback to see them here</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        allNotifications.forEach((notif, index) => {
+            const statusIcon = notif.status === 'solved' || notif.status === 'reviewed' ? '✅' : 
+                              notif.status === 'pending' ? '⏳' : '❌';
+            const statusText = notif.status === 'solved' || notif.status === 'reviewed' ? 'COMPLETED' :
+                              notif.status === 'pending' ? 'PENDING' : 'NEEDS ATTENTION';
+            
+            html += `
+                <div class="notification-card ${notif.status}">
+                    <div class="notification-icon">${notif.icon}</div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <div class="notification-title">${notif.title}</div>
+                            <div class="notification-status">
+                                <span class="status-badge ${notif.status}">${statusIcon} ${statusText}</span>
+                            </div>
+                        </div>
+                        <div class="notification-message">${notif.message}</div>
+                        ${notif.rating ? `<div class="notification-rating">${'★'.repeat(notif.rating)}${'☆'.repeat(5-notif.rating)} ${notif.rating}/5</div>` : ''}
+                        <div class="notification-meta">
+                            <span class="notification-date">📅 ${notif.date}</span>
+                            <div class="notification-actions">
+                                ${notif.type === 'report' ? 
+                                    `<button onclick="editMyReport(${notif.id})" class="notif-btn edit">✏️</button>
+                                     <button onclick="deleteMyReport(${notif.id})" class="notif-btn delete">🗑️</button>` :
+                                    `<button onclick="editMyFeedback(${notif.id})" class="notif-btn edit">✏️</button>
+                                     <button onclick="deleteMyFeedback(${notif.id})" class="notif-btn delete">🗑️</button>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    html += `
+            </div>
+            <div class="notification-footer">
+                <button onclick="showUserReportForm()" class="notif-action-btn">📝 New Report</button>
+                <button onclick="showUserFeedbackForm()" class="notif-action-btn">💬 New Feedback</button>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function viewReportDetails(id) {
+    const report = userReports.find(r => r.id === id);
+    if (report) {
+        alert(`Report Details:\n\nType: ${report.type}\nDescription: ${report.description}\nDate: ${report.date}\nStatus: ${report.status.toUpperCase()}`);
+    }
+}
+
+function viewFeedbackDetails(id) {
+    const feedback = userFeedback.find(f => f.id === id);
+    if (feedback) {
+        alert(`Feedback Details:\n\nType: ${feedback.type}\nFeedback: ${feedback.feedback}\nRating: ${feedback.rating}/5\nDate: ${feedback.date}\nStatus: ${feedback.status.toUpperCase()}`);
+    }
+}
+
+function getTypeIcon(type) {
+    const icons = {
+        'Road Problems': '🛣️',
+        'Street Light Problems': '💡',
+        'Municipal Problems': '🏛️',
+        'Ragging Issues': '⚠️',
+        'Other Issues': '📝'
+    };
+    return icons[type] || '📝';
+}
+
+function viewReportDetails(id) {
+    alert(`Viewing detailed report #${id}\n\nThis would show full report details, timeline, and admin responses.`);
+}
+
+function showNotifications() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('notificationsSection').classList.remove('hidden');
+    displayNotifications();
+}
+
+function displayNotifications() {
+    const notifications = [
+        {id: 1, message: 'Your road problem report has been marked as SOLVED', date: '12/15/2024', type: 'solved'},
+        {id: 2, message: 'Your street light report is being reviewed', date: '12/14/2024', type: 'pending'},
+        {id: 3, message: 'Your water supply report has been marked as UNSOLVED', date: '12/13/2024', type: 'unsolved'},
+        {id: 4, message: 'Thank you for your feedback on road problems', date: '12/12/2024', type: 'feedback'}
+    ];
+    
+    const container = document.getElementById('notificationsList');
+    container.innerHTML = notifications.map(notif => `
+        <div class="notification-item ${notif.type}">
+            <p>${notif.message}</p>
+            <div class="meta">Received on ${notif.date}</div>
+        </div>
+    `).join('');
+}
+
+function showUserDashboard() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('dashboardSection').classList.remove('hidden');
+    updateUserDashboard();
+}
+
+function updateUserDashboard() {
+    document.getElementById('reportCount').textContent = '3';
+    document.getElementById('feedbackCount').textContent = '2';
+    document.getElementById('billCount').textContent = '1';
+    
+    // Draw simple chart
+    const canvas = document.getElementById('activityChart');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const data = [3, 2, 1, 2, 3, 1, 2];
+        const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        
+        data.forEach((value, index) => {
+            const barHeight = value * 30;
+            const x = index * 50 + 30;
+            const y = canvas.height - barHeight - 20;
+            
+            ctx.fillStyle = '#007bff';
+            ctx.fillRect(x, y, 30, barHeight);
+            
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.fillText(labels[index], x + 5, canvas.height - 5);
+            ctx.fillText(value.toString(), x + 12, y - 5);
+        });
+    }
+}
+
+// Report and Feedback Management
+function reportIssueFor(serviceName) {
+    showUserReportForm();
+    document.getElementById('issueService').value = 'other';
+    document.getElementById('issueDesc').value = `Issue with ${serviceName}: `;
+}
+
+function submitReport(e) {
+    e.preventDefault();
+    const service = document.getElementById('issueService').value;
+    const description = document.getElementById('issueDesc').value;
+    
+    if (!service || !description) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    alert('Report submitted successfully! You will receive notifications about status updates.');
+    document.getElementById('issueForm').reset();
+    showCityServices();
+}
+
+function submitFeedback(e) {
+    e.preventDefault();
+    const service = document.getElementById('feedbackService').value;
+    const feedback = document.getElementById('feedbackDesc').value;
+    const rating = document.getElementById('rating').value;
+    
+    if (!service || !feedback || !rating) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    alert('Feedback submitted successfully! Thank you for your input.');
+    document.getElementById('userFeedbackForm').reset();
+    showCityServices();
+}
+
+// Store reports and feedback data
+let userReports = [
+    {id: 1, type: 'Road Problems', description: 'Large pothole on Main Street causing traffic issues', status: 'pending', date: '15 Dec 2024'},
+    {id: 2, type: 'Street Light Problems', description: 'Street light not working on Library Road for 3 days', status: 'solved', date: '14 Dec 2024'},
+    {id: 3, type: 'Municipal Problems', description: 'Water supply disruption in residential area', status: 'unsolved', date: '13 Dec 2024'}
+];
+
+let userFeedback = [
+    {id: 1, type: 'Road Problems', feedback: 'Excellent service! Road was fixed within 24 hours as promised.', rating: 5, status: 'reviewed', date: '12 Dec 2024'},
+    {id: 2, type: 'Street Light Problems', feedback: 'Quick response time, very satisfied with the repair work.', rating: 4, status: 'pending', date: '11 Dec 2024'}
+];
+
+function editMyReport(id) {
+    const report = userReports.find(r => r.id === id);
+    if (report) {
+        const newDesc = prompt('Edit your report description:', report.description);
+        if (newDesc && newDesc.trim()) {
+            report.description = newDesc.trim();
+            alert('Report updated successfully!');
+            displayMyReports();
+        }
+    }
+}
+
+function deleteMyReport(id) {
+    if (confirm('Are you sure you want to delete this report?')) {
+        userReports = userReports.filter(r => r.id !== id);
+        alert('Report deleted successfully!');
+        displayMyReports();
+    }
+}
+
+function editMyFeedback(id) {
+    const feedback = userFeedback.find(f => f.id === id);
+    if (feedback) {
+        const newFeedback = prompt('Edit your feedback:', feedback.feedback);
+        if (newFeedback && newFeedback.trim()) {
+            feedback.feedback = newFeedback.trim();
+            alert('Feedback updated successfully!');
+            displayMyReports();
+        }
+    }
+}
+
+function deleteMyFeedback(id) {
+    if (confirm('Are you sure you want to delete this feedback?')) {
+        userFeedback = userFeedback.filter(f => f.id !== id);
+        alert('Feedback deleted successfully!');
+        displayMyReports();
+    }
+}
+
+// Live Chat Functions
+function showChat() {
+    document.querySelectorAll('#userPanel .section, #userPanel .form-container').forEach(el => el.classList.add('hidden'));
+    document.getElementById('servicesDisplay').style.display = 'none';
+    document.getElementById('chatSection').classList.remove('hidden');
+    displayWelcomeMessage();
+}
+
+function displayWelcomeMessage() {
+    const chatMessages = document.getElementById('chatMessages');
+    if (!chatMessages.innerHTML.trim()) {
+        chatMessages.innerHTML = `
+            <div class="chat-message ai">
+                <strong>Aurora:</strong> Hello! I'm Aurora, your city assistant. I can help you with:
+                <br>• Report city issues
+                <br>• Find city services
+                <br>• Get emergency contacts
+                <br>• Answer questions about city operations
+                <br><br>How can I help you today?
+                <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+            </div>
+        `;
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message
+    const chatMessages = document.getElementById('chatMessages');
+    const userMessage = `
+        <div class="chat-message user">
+            <strong>You:</strong> ${message}
+            <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+        </div>
+    `;
+    chatMessages.innerHTML += userMessage;
+    
+    // Clear input
+    input.value = '';
+    
+    // Show typing indicator
+    const typingIndicator = `
+        <div class="chat-message ai typing" id="typingIndicator">
+            <strong>Aurora:</strong> <span class="typing-dots">Typing...</span>
+        </div>
+    `;
+    chatMessages.innerHTML += typingIndicator;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Get AI response after delay
+    setTimeout(() => {
+        document.getElementById('typingIndicator').remove();
+        const aiResponse = getAuroraResponse(message);
+        const aiMessage = `
+            <div class="chat-message ai">
+                <strong>Aurora:</strong> ${aiResponse}
+                <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+            </div>
+        `;
+        chatMessages.innerHTML += aiMessage;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1500);
+}
+
+function getAuroraResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+        return 'Hello! I\'m here to help you with city services. What can I assist you with today?';
+    }
+    
+    if (msg.includes('emergency') || msg.includes('urgent') || msg.includes('help')) {
+        return 'For emergencies:<br>🚨 Police: 100<br>🚑 Medical: 108<br>🚒 Fire: 101<br><br>For non-emergency city issues, I can help you report them. What\'s the problem?';
+    }
+    
+    if (msg.includes('road') || msg.includes('pothole') || msg.includes('street')) {
+        return 'I can help you report road issues! Common problems include:<br>• Potholes<br>• Traffic signal issues<br>• Road damage<br><br>Would you like me to help you submit a road problem report?';
+    }
+    
+    if (msg.includes('light') || msg.includes('lamp') || msg.includes('lighting')) {
+        return 'Street lighting issues are important for safety! I can help you report:<br>• Lights not working<br>• Flickering lights<br>• Broken fixtures<br><br>These are usually fixed within 24 hours. Shall I help you report this?';
+    }
+    
+    if (msg.includes('water') || msg.includes('drainage') || msg.includes('pipe')) {
+        return 'Water and drainage issues need attention! I can help with:<br>• Water supply problems<br>• Drainage blockages<br>• Pipe leaks<br><br>These typically take 2-3 days to resolve. Would you like to report a water issue?';
+    }
+    
+    if (msg.includes('hospital') || msg.includes('police') || msg.includes('service')) {
+        return 'I can help you find city services! We have:<br>🏥 Hospitals<br>👮 Police stations<br>🏛️ Government offices<br>📚 Libraries<br><br>What specific service are you looking for?';
+    }
+    
+    if (msg.includes('thank') || msg.includes('thanks')) {
+        return 'You\'re welcome! I\'m always here to help with city services. Is there anything else you need assistance with?';
+    }
+    
+    return 'I understand you need help with city services. I can assist with:<br>• Reporting issues (roads, lights, water)<br>• Finding city services<br>• Emergency contacts<br>• Submitting feedback<br><br>Could you tell me more about what you need help with?';
+}
+
+function quickAction(action) {
+    document.getElementById('chatInput').value = action;
+    sendMessage();
+}
+
+function clearChat() {
+    if (confirm('Clear chat history?')) {
+        document.getElementById('chatMessages').innerHTML = '';
+        displayWelcomeMessage();
+    }
+}
+
+// Add enter key support for chat
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+    }, 1000);
+});
+
+// Logout function
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Hide all panels
+        document.querySelectorAll('.panel').forEach(panel => {
+            panel.classList.add('hidden');
+        });
+        
+        // Show welcome panel
+        document.getElementById('welcomePanel').classList.remove('hidden');
+        
+        // Reset navigation buttons
+        document.getElementById('logoutBtn').classList.add('hidden');
+        document.getElementById('adminBtn').classList.remove('hidden');
+        document.getElementById('userBtn').classList.remove('hidden');
+        
+        // Clear any form data
+        document.querySelectorAll('form').forEach(form => form.reset());
+        
+        alert('You have been logged out successfully.');
+    }
+}
+
+// Edit service function
+function editService(button) {
+    const serviceItem = button.closest('.edit-service-item');
+    const serviceName = serviceItem.querySelector('h4').textContent;
+    const serviceInfo = serviceItem.querySelector('p').textContent;
+    const address = serviceItem.querySelectorAll('p')[1].textContent.replace('Address: ', '');
+    
+    // Extract city and type from service info
+    const cityMatch = serviceInfo.match(/City: ([^|]+)/);
+    const typeMatch = serviceInfo.match(/Type: (.+)/);
+    const city = cityMatch ? cityMatch[1].trim() : '';
+    const type = typeMatch ? typeMatch[1].trim() : '';
+    
+    // Show edit form
+    document.getElementById('editServicesSection').classList.add('hidden');
+    document.getElementById('editServiceForm').classList.remove('hidden');
+    
+    // Populate form with current values
+    document.getElementById('editCityName').value = city;
+    document.getElementById('editServiceName').value = serviceName;
+    document.getElementById('editServiceType').value = type.replace(' ', '-').toLowerCase();
+    document.getElementById('editAddress').value = address;
+}
+
+// Cancel edit function
+function cancelEdit() {
+    document.getElementById('editServiceForm').classList.add('hidden');
+    document.getElementById('editServicesSection').classList.remove('hidden');
+    document.getElementById('serviceEditForm').reset();
+}
+
+// Update service function
+function updateService(e) {
+    e.preventDefault();
+    const cityName = document.getElementById('editCityName').value;
+    const serviceName = document.getElementById('editServiceName').value;
+    const serviceType = document.getElementById('editServiceType').value;
+    const address = document.getElementById('editAddress').value;
+    
+    if (!cityName || !serviceName || !serviceType || !address) {
+        alert('Please fill all required fields');
+        return;
+    }
+    
+    alert(`Service Updated Successfully!\n\nCity: ${cityName}\nService: ${serviceName}\nType: ${serviceType}\nAddress: ${address}`);
+    
+    // Go back to services list
+    cancelEdit();
+}
+
+// Report status functions
+function markSolved(button) {
+    const reportItem = button.closest('.report-item');
+    const statusDiv = reportItem.querySelector('.status');
+    const issueTitle = reportItem.querySelector('h4').textContent;
+    
+    statusDiv.className = 'status solved';
+    statusDiv.textContent = 'SOLVED';
+    
+    // Update buttons
+    const buttonsDiv = button.parentNode;
+    buttonsDiv.innerHTML = '<button class="delete-btn" onclick="deleteReport(this)">Delete Report</button>';
+    
+    alert(`Report marked as SOLVED: ${issueTitle}`);
+}
+
+function markUnsolved(button) {
+    const reportItem = button.closest('.report-item');
+    const statusDiv = reportItem.querySelector('.status');
+    const issueTitle = reportItem.querySelector('h4').textContent;
+    
+    statusDiv.className = 'status unsolved';
+    statusDiv.textContent = 'UNSOLVED';
+    
+    alert(`Report marked as UNSOLVED: ${issueTitle}`);
+}
+
+function deleteReport(button) {
+    const reportItem = button.closest('.report-item');
+    const issueTitle = reportItem.querySelector('h4').textContent;
+    
+    if (confirm(`Delete this report: ${issueTitle}?`)) {
+        reportItem.remove();
+        alert('Report deleted successfully.');
+    }
+}
+
+// Feedback management functions
+function markReviewed(button) {
+    const feedbackItem = button.closest('.feedback-item');
+    const statusDiv = feedbackItem.querySelector('.status');
+    const feedbackTitle = feedbackItem.querySelector('h4').textContent;
+    
+    statusDiv.className = 'status reviewed';
+    statusDiv.textContent = 'REVIEWED';
+    
+    alert(`Feedback marked as REVIEWED: ${feedbackTitle}`);
+}
+
+function deleteFeedback(button) {
+    const feedbackItem = button.closest('.feedback-item');
+    const feedbackTitle = feedbackItem.querySelector('h4').textContent;
+    
+    if (confirm(`Delete this feedback: ${feedbackTitle}?`)) {
+        feedbackItem.remove();
+        alert('Feedback deleted successfully.');
+    }
+}
+
+// Bulk delete functions
+function deleteSelectedReports() {
+    const checkboxes = document.querySelectorAll('#reportsList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert('Please select reports to delete.');
+        return;
+    }
+    
+    if (confirm(`Delete ${checkboxes.length} selected report(s)?`)) {
+        checkboxes.forEach(checkbox => {
+            checkbox.closest('.report-item').remove();
+        });
+        alert(`${checkboxes.length} report(s) deleted successfully.`);
+    }
+}
+
+function deleteSelectedFeedback() {
+    const checkboxes = document.querySelectorAll('#feedbackList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert('Please select feedback to delete.');
+        return;
+    }
+    
+    if (confirm(`Delete ${checkboxes.length} selected feedback(s)?`)) {
+        checkboxes.forEach(checkbox => {
+            checkbox.closest('.feedback-item').remove();
+        });
+        alert(`${checkboxes.length} feedback(s) deleted successfully.`);
+    }
+}
+
+function selectAllReports() {
+    const checkboxes = document.querySelectorAll('#reportsList input[type="checkbox"]');
+    const selectAll = document.getElementById('selectAllReports').checked;
+    checkboxes.forEach(checkbox => checkbox.checked = selectAll);
+}
+
+function selectAllFeedback() {
+    const checkboxes = document.querySelectorAll('#feedbackList input[type="checkbox"]');
+    const selectAll = document.getElementById('selectAllFeedback').checked;
+    checkboxes.forEach(checkbox => checkbox.checked = selectAll);
+}
+
+// Create admin validation function
+function validateAdminPassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{5,9}$/;
+    return passwordRegex.test(password);
+}
+
+// User management functions
+function blockUser(button) {
+    const userItem = button.closest('.user-item');
+    const userName = userItem.querySelector('h4').textContent;
+    const statusBadge = userItem.querySelector('.status-badge');
+    
+    if (confirm(`Block user: ${userName}?`)) {
+        statusBadge.className = 'status-badge blocked';
+        statusBadge.textContent = 'BLOCKED';
+        button.textContent = 'Unblock';
+        button.className = 'block-btn unblock';
+        button.onclick = function() { unblockUser(this); };
+        userItem.classList.add('blocked-user');
+        alert(`User ${userName} has been blocked.`);
+    }
+}
+
+function unblockUser(button) {
+    const userItem = button.closest('.user-item');
+    const userName = userItem.querySelector('h4').textContent;
+    const statusBadge = userItem.querySelector('.status-badge');
+    
+    if (confirm(`Unblock user: ${userName}?`)) {
+        statusBadge.className = 'status-badge active';
+        statusBadge.textContent = 'ACTIVE';
+        button.textContent = 'Block';
+        button.className = 'block-btn block';
+        button.onclick = function() { blockUser(this); };
+        userItem.classList.remove('blocked-user');
+        alert(`User ${userName} has been unblocked.`);
+    }
+}
+
+// Connect form to validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('adminLoginForm');
+    if (form) {
+        form.onsubmit = validateAdminLogin;
+    }
+});
+</script>
+<script src="script.js"></script>
+</html>

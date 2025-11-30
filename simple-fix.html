@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Management Platform</title>
+    <style>
+        .hidden { display: none; }
+        .panel { padding: 20px; margin: 20px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Welcome Panel -->
+    <div id="welcomePanel" class="panel">
+        <h1>City Management Platform</h1>
+        <button onclick="showAdmin()">Access Admin Panel</button>
+        <button onclick="showUser()">Enter Citizen Portal</button>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="panel hidden">
+        <h2>Admin Login</h2>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button>Login</button>
+        <button onclick="showWelcome()">Back</button>
+    </div>
+
+    <!-- User Panel -->
+    <div id="userPanel" class="panel hidden">
+        <h2>User Login</h2>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button>Login</button>
+        <button onclick="showWelcome()">Back</button>
+    </div>
+
+    <script>
+        function showAdmin() {
+            document.getElementById('welcomePanel').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('userPanel').style.display = 'none';
+        }
+
+        function showUser() {
+            document.getElementById('welcomePanel').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function showWelcome() {
+            document.getElementById('welcomePanel').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

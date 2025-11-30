@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Management Platform</title>
+    <style>
+        .hidden { display: none !important; }
+        .panel { padding: 20px; margin: 20px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .nav-tab { background: #28a745; }
+        .section { padding: 20px; border: 1px solid #ddd; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <!-- Welcome Panel -->
+    <div id="welcomePanel" class="panel">
+        <h1>City Management Platform</h1>
+        <button onclick="showAdminLogin()">Access Admin Panel</button>
+        <button onclick="showUserLogin()">Enter Citizen Portal</button>
+    </div>
+
+    <!-- Admin Login Panel -->
+    <div id="adminLoginPanel" class="panel hidden">
+        <h2>Admin Login</h2>
+        <form onsubmit="loginAdmin(event)">
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <button onclick="showWelcome()">Back</button>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="panel hidden">
+        <h2>Admin Dashboard</h2>
+        <div>
+            <button class="nav-tab" onclick="showAddForm()">📝 Add City Info</button>
+            <button class="nav-tab" onclick="showReports()">📋 View Reports</button>
+            <button class="nav-tab" onclick="showUsers()">👥 View Users</button>
+            <button class="nav-tab" onclick="showAnalytics()">📈 Analytics</button>
+        </div>
+        
+        <div id="addForm" class="section hidden">
+            <h3>Add City Information</h3>
+            <p>Form to add new city services...</p>
+        </div>
+        
+        <div id="reportsSection" class="section hidden">
+            <h3>User Reports</h3>
+            <p>List of user reports will appear here...</p>
+        </div>
+        
+        <div id="usersSection" class="section hidden">
+            <h3>Registered Users</h3>
+            <p>List of registered users will appear here...</p>
+        </div>
+        
+        <div id="analyticsSection" class="section hidden">
+            <h3>Analytics Dashboard</h3>
+            <p>Analytics charts and data will appear here...</p>
+        </div>
+    </div>
+
+    <!-- User Login Panel -->
+    <div id="userLoginPanel" class="panel hidden">
+        <h2>User Login</h2>
+        <form onsubmit="loginUser(event)">
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <button onclick="showWelcome()">Back</button>
+    </div>
+
+    <!-- User Panel -->
+    <div id="userPanel" class="panel hidden">
+        <h2>City Services</h2>
+        <div>
+            <button class="nav-tab" onclick="showServices()">🏠 City Services</button>
+            <button class="nav-tab" onclick="showReportForm()">🚨 Report Issue</button>
+            <button class="nav-tab" onclick="showChat()">💬 Live Chat</button>
+        </div>
+        
+        <div id="servicesDisplay" class="section">
+            <h3>Available City Services</h3>
+            <p>City services will be displayed here...</p>
+        </div>
+        
+        <div id="reportForm" class="section hidden">
+            <h3>Report Issue</h3>
+            <p>Issue reporting form will appear here...</p>
+        </div>
+        
+        <div id="chatSection" class="section hidden">
+            <h3>Live Chat</h3>
+            <p>Chat interface will appear here...</p>
+        </div>
+    </div>
+
+    <script>
+        function showWelcome() {
+            hideAll();
+            document.getElementById('welcomePanel').classList.remove('hidden');
+        }
+
+        function showAdminLogin() {
+            hideAll();
+            document.getElementById('adminLoginPanel').classList.remove('hidden');
+        }
+
+        function showUserLogin() {
+            hideAll();
+            document.getElementById('userLoginPanel').classList.remove('hidden');
+        }
+
+        function loginAdmin(e) {
+            e.preventDefault();
+            hideAll();
+            document.getElementById('adminPanel').classList.remove('hidden');
+            showAddForm(); // Show first section by default
+        }
+
+        function loginUser(e) {
+            e.preventDefault();
+            hideAll();
+            document.getElementById('userPanel').classList.remove('hidden');
+            showServices(); // Show services by default
+        }
+
+        function hideAll() {
+            document.querySelectorAll('.panel, .section').forEach(el => el.classList.add('hidden'));
+        }
+
+        // Admin functions
+        function showAddForm() {
+            document.querySelectorAll('#adminPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('addForm').classList.remove('hidden');
+        }
+
+        function showReports() {
+            document.querySelectorAll('#adminPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('reportsSection').classList.remove('hidden');
+        }
+
+        function showUsers() {
+            document.querySelectorAll('#adminPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('usersSection').classList.remove('hidden');
+        }
+
+        function showAnalytics() {
+            document.querySelectorAll('#adminPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('analyticsSection').classList.remove('hidden');
+        }
+
+        // User functions
+        function showServices() {
+            document.querySelectorAll('#userPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('servicesDisplay').classList.remove('hidden');
+        }
+
+        function showReportForm() {
+            document.querySelectorAll('#userPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('reportForm').classList.remove('hidden');
+        }
+
+        function showChat() {
+            document.querySelectorAll('#userPanel .section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('chatSection').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
