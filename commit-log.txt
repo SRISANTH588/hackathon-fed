@@ -1,0 +1,12 @@
+COMMIT LOG - HACKATHON PROJECT
+================================
+
+Repository: hackathon-fed
+Created: $(date)
+
+This file will track all commits made to this repository.
+
+Current Status: Repository initialized, no commits yet.
+
+To update this log after making commits, run:
+git log --oneline --all >> commit-log.txt
