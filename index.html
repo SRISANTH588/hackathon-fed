@@ -265,6 +265,7 @@
                 <div class="bulk-actions">
                     <input type="checkbox" id="selectAllReports" onchange="selectAllReports()"> Select All
                     <button onclick="deleteSelectedReports()" class="delete-btn">Delete Selected</button>
+                    <button onclick="markSelectedSolved()" class="status-btn">Mark Selected as Solved</button>
                 </div>
                 <div id="reportsList">
                     <div class="report-item">
@@ -2100,6 +2101,27 @@ function selectAllReports() {
     const checkboxes = document.querySelectorAll('#reportsList input[type="checkbox"]');
     const selectAll = document.getElementById('selectAllReports').checked;
     checkboxes.forEach(checkbox => checkbox.checked = selectAll);
+}
+
+function markSelectedSolved() {
+    const checkboxes = document.querySelectorAll('#reportsList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert('Please select reports to mark as solved.');
+        return;
+    }
+    
+    if (confirm(`Mark ${checkboxes.length} selected report(s) as SOLVED?`)) {
+        checkboxes.forEach(checkbox => {
+            const reportItem = checkbox.closest('.report-item');
+            const statusDiv = reportItem.querySelector('.status');
+            const buttonsDiv = reportItem.querySelector('.status-btn').parentNode;
+            
+            statusDiv.className = 'status solved';
+            statusDiv.textContent = 'SOLVED';
+            buttonsDiv.innerHTML = '<button class="delete-btn" onclick="deleteReport(this)">Delete Report</button>';
+        });
+        alert(`${checkboxes.length} report(s) marked as SOLVED.`);
+    }
 }
 
 function selectAllFeedback() {
